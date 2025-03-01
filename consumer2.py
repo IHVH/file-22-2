@@ -6,8 +6,8 @@ from datetime import datetime
 from dataclasses import dataclass
 import json
 import shutil
-#import matplotlib.pyplot as plt
-#import numpy as np
+import matplotlib.pyplot as plt
+import numpy as np
 
 _DOWNLOAD = "Download\\"
 _LOADDED = "Loaded\\"
@@ -25,23 +25,36 @@ class InventoryItem:
         self.unit_price = unit_price
         self.quantity_on_hand = quantity_on_hand
 
+@dataclass
+class Point:
+    y: int = 0
+    x: int = 0
+
+    def __init__(self, x: str, y: float):
+        self.x = x
+        self.y = y
+
 
 def make_dir(path):
     dirs = os.path.dirname(path)
     os.makedirs(dirs, exist_ok=True)
 
 def read_data():
+    x = []
+    y = []
+
     walk = os.walk(_DOWNLOAD)
     for (root, dirs, files) in walk:
         for file_name in files:
-            if '.json' in file_name:
+            if '_points.json' in file_name:
                 try:
                     print(file_name)
                     path = f"{_DOWNLOAD}{file_name}"
                     with open(path, 'r', encoding="utf-8") as f:
                         data = json.load(f)
-                        inv_item = InventoryItem(data["name"], data["unit_price"], data["quantity_on_hand"])
-                        work_with_InventoryItem(inv_item)
+                        point = Point(data["x"], data["y"])
+                        x.append(point.x)
+                        y.append(point.y)
 
                     move_file_to_loadded(file_name)
                 except Exception as e:
@@ -49,6 +62,14 @@ def read_data():
                     print(f"Exception {e}")
             else:
                 move_file_to_error(file_name)
+
+    work_with_point(x, y)
+
+def work_with_point(x, y):
+    x1 = np.array(x)
+    y1 = np.array(y)
+    plt.scatter(x1, y1, color='blue', label='Group 1')
+    plt.show()
 
 
 def work_with_InventoryItem(obj: InventoryItem):
@@ -71,16 +92,9 @@ def main():
     make_dir(_LOADDED)
     make_dir(_ERROR)
 
-    #x1 = np.array([160, 165, 170, 175, 180, 185, 190, 195, 200, 205])
-    #y1 = np.array([55, 58, 60, 62, 64, 66, 68, 70, 72, 74])
-    #x2 = np.array([150, 155, 160, 165, 170, 175, 180, 195, 200, 205])
-    #y2 = np.array([50, 52, 54, 56, 58, 64, 66, 68, 70, 72])
-    #plt.scatter(x1, y1, color='blue', label='Group 1')
-    #plt.show()
-
     while True:
         read_data()
-        time.sleep(1)
+        time.sleep(10)
         
 
 if __name__ == "__main__":
