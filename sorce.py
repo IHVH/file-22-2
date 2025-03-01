@@ -43,7 +43,7 @@ def work():
     _I += 1
     price = random.randint(1000, 99999)
     quant = random.randint(1, 100)
-    inv = InventoryItem("NAME", price, quant)
+    inv = InventoryItem(f"NAME {random.randint(1000, 99999)}", price, quant)
     write(_I, inv)
 
 
