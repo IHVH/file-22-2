@@ -13,18 +13,6 @@ _DOWNLOAD = "Download\\"
 _LOADDED = "Loaded\\"
 _ERROR = "Error\\"
 
-
-@dataclass
-class InventoryItem:
-    name: str
-    unit_price: float
-    quantity_on_hand: int = 0
-
-    def __init__(self, name: str, unit_price: float, quantity_on_hand: int = 0):
-        self.name = name
-        self.unit_price = unit_price
-        self.quantity_on_hand = quantity_on_hand
-
 @dataclass
 class Point:
     y: int = 0
@@ -70,12 +58,6 @@ def work_with_point(x, y):
     y1 = np.array(y)
     plt.scatter(x1, y1, color='blue', label='Group 1')
     plt.show()
-
-
-def work_with_InventoryItem(obj: InventoryItem):
-    print(f"Имя = {obj.name}")
-    print(f"Цена = {obj.unit_price}")
-    print(f"Количество = {obj.quantity_on_hand}")
 
 
 def move_file_to_error(file_name):
